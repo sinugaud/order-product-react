@@ -1,0 +1,18 @@
+.sidebar {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease; /* Adjust the transition duration as needed */
+  }
+  
+  .sidebar.open {
+    width: 60%;
+    height: auto; /* Define the width you want when the sidebar is open */
+  }
+  
+  .main-content {
+    width: 80%; /* Set the main content width */
+    transition: width 0.3s ease; /* Add a transition for main content if needed */
+  }
+  
+  /* Other styles as needed */
+  
