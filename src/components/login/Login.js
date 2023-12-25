@@ -16,9 +16,12 @@ function Login() {
 
       const authToken = response.data;
       sessionStorage.setItem('token', authToken);
+      sessionStorage.setItem('username', username);
+
 
       // Redirect to the '/' route and send the token as state
-      window.location.href = '/';
+      // window.location.href = '/';
+        window.history.back();
     } catch (error) {
       console.error('Error:', error);
       setError('Invalid username or password');

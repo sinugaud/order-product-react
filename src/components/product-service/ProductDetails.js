@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import NavBar from "../navbar/Navbar";
 
 const ProductDetails = ({ onData }) => {
   const { id } = useParams();
@@ -29,8 +30,10 @@ const ProductDetails = ({ onData }) => {
 
   return (
     <>
+      {/* <div className=" flex-grow"> */}
+      {/* <NavBar></NavBar> */}
       <Link to={`/`}>Go back to Product List</Link>
-      <div className="w-3/4 p-4">
+      {/* <div className="w-3/4 p-4"> */}
         <h2 className="text-2xl font-bold mb-4">Product Details</h2>
         {product ? (
           <div className="bg-gray-100 rounded-lg p-6">
@@ -42,7 +45,8 @@ const ProductDetails = ({ onData }) => {
         ) : (
           <p>Loading...</p>
         )}
-      </div>
+        {/* </div> */}
+        {/* </div> */}
     </>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../navbar/Navbar";
 import { useNavigate } from 'react-router-dom';
+import { NavbarWithSearch } from "../navbar/NavbarWithSearch";
 
 
 const ProductList = () => {
@@ -36,7 +37,8 @@ const ProductList = () => {
 
       <div className="flex flex-col w-full">
         {/* Top Navbar */}
-        <NavBar />
+        <NavBar
+         />
 
         {/* Main content */}
         <div className="flex-grow flex justify-center items-center p-4">

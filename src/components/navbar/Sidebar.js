@@ -57,6 +57,11 @@ const Sidebar = () => {
             Orders
           </Link>
         </li>
+        <li className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
+          <Link to={`/sign-up`} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
+            Signup
+          </Link>
+        </li>
         <li>
         <button onClick={handleLogout} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2" disabled={loggingOut}>
             {loggingOut ? 'Logging Out...' : 'Logout'}

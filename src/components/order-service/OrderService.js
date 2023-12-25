@@ -5,6 +5,7 @@ import axios from "axios";
 import ProductDetails from "../product-service/ProductDetails";
 import ProductService from "../product-service/ProductService";
 import Swal from "sweetalert2";
+import NavBar from "../navbar/Navbar";
 
 const OrderService = (props) => {
   const { id } = useParams();
@@ -20,9 +21,11 @@ const OrderService = (props) => {
         console.error(error.message);
       });
   }, [id]);
+  const user =sessionStorage.getItem('username');
 
 
   const handleSubmit = async (values) => {
+    
     if (!product) {
       console.error("Product details not available");
       return;
@@ -30,6 +33,7 @@ const OrderService = (props) => {
 
     const { username, status, quantity } = values;
     const totalAmount = product.price * quantity;
+    console.log("logged username = ",username)
 
     const orderData = {
       username,
@@ -45,6 +49,7 @@ const OrderService = (props) => {
     };
 
     const authToken = sessionStorage.getItem('token');
+
     const headers = {
       Authorization:"Bearer "+ authToken,
       'Content-Type': 'application/json',
@@ -67,9 +72,10 @@ const OrderService = (props) => {
 
   return (
     <div className="flex">
+      <NavBar></NavBar>
       {/* Sidebar */}
       <div className="w-1/4 bg-gray-100 h-screen p-4">
-        <ProductDetails onData={(name, price) => setProduct({ name, price })} />
+        <ProductDetails onData={(name, price) => setProduct({ name, price })}></ProductDetails>
       </div>
 
       {/* Main Content */}
@@ -78,7 +84,7 @@ const OrderService = (props) => {
           <h2 className="text-2xl font-bold mb-4">place Order</h2>
           <Formik
             initialValues={{
-              username: "",
+              username: user,
               status: "",
               quantity: "",
             }}
@@ -87,8 +93,9 @@ const OrderService = (props) => {
 
 {({ values }) => (
                   <Form className="space-y-4">
-                    <Field
-                      type="text"
+                <Field
+                  type="hidden"
+                      // type="text"
                       name="username"
                       placeholder="User name"
                       className="border p-2 rounded-md w-full"
