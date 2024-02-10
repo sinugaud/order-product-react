@@ -9,13 +9,15 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8083/auth/generateToken', {
+      const response = await axios.post('http://localhost:8083/login', {
         username: username,
         password: password,
       });
 
       const authToken = response.data;
+      console.log("token",authToken)
       sessionStorage.setItem('token', authToken);
+
       sessionStorage.setItem('username', username);
 
 

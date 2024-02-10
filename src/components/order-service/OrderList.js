@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import NavBar from "../navbar/Navbar";
-import { NavbarWithSearch } from "../navbar/NavbarWithSearch";
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -51,7 +50,6 @@ const OrderList = () => {
               <p className="text-gray-600">Date: {order.date}</p>
               <p className="text-gray-600">Status: {order.status}</p>
               <p className="text-gray-600">Total Amount: ${order.totalAmount}</p>
-              {/* Additional order details can be added here */}
             </div>
           </Link>
           

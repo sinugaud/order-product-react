@@ -16,7 +16,7 @@ function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8083/auth/addNewUser', userInfo);
+            const response = await axios.post('http://localhost:8083/sign-up', userInfo);
             window.history.back();
 
         } catch (error) {

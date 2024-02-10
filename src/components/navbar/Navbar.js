@@ -28,30 +28,6 @@ function Navigation() {
   );
 }
 
-// function UserProfile({ handleLogout, loggingOut }) {
-//   const userNavigation = [
-//     { name: 'My Profile', link: '/profile' },
-//     { name: 'My Orders', link: '/orders' },
-//     { name: 'Sign out', link: '/logout' },
-//   ];
-
-//   return (
-//     <div className="flex items-center space-x-4">
-//       {userNavigation.map((item) => (
-//         <a
-//           key={item.name}
-//           href={item.link}
-//           className="text-gray-700 hover:text-black"
-//         >
-//           {item.name}
-//         </a>
-//       ))}
-//       <button onClick={handleLogout} className="text-gray-700  hover:text-black px-4 py-2" disabled={loggingOut}>
-//         {loggingOut ? 'Logging Out...' : 'Logout'}
-//       </button>
-//     </div>
-//   );
-// }
 
 function NavBar() {
   const [loggingOut, setLoggingOut] = useState(false);
@@ -59,13 +35,12 @@ function NavBar() {
   const handleLogout = async (e) => {
     e.preventDefault();
     const authToken = sessionStorage.getItem('token');
-    console.log("authToken",authToken)
 
     try {
-      setLoggingOut(true); // Set logging out state to true
+      setLoggingOut(true);
 
       const headers = {
-        Authorization: authToken,
+        Authorization:"Bearer "+ authToken,
         'Content-Type': 'application/json',
       };
 
@@ -75,21 +50,16 @@ function NavBar() {
 
       setTimeout(() => {
         setLoggingOut(false);
-        // Reset logging out state after some time (simulating the logout process)
-        // window.location.href = '/'; // Redirect if needed
+        window.location.href = '/'; // Redirect if needed
       }, 1500); // Adjust the time according to your preference
     } catch (error) {
       console.error('Error:', error);
-      setLoggingOut(false); // Reset logging out state in case of error
-      // Handle errors, maybe show an error message to the user
+      setLoggingOut(false); 
     }
   
 
   };
 
-  const [userInfo] = useState({
-    name: 'John Doe',
-  });
 
   return (
     <div className="flex">
@@ -101,15 +71,10 @@ function NavBar() {
 
           <Navigation />
 
-          {/* {userInfo && (
+          {  (
             <UserProfile handleLogout={handleLogout} loggingOut={loggingOut} />
-          )} */}
-          <UserProfile />
+          )}
         </header>
-
-        <main className="px-4 py-6">
-          {/* Rest of your content */}
-        </main>
       </div>
     </div>
   );

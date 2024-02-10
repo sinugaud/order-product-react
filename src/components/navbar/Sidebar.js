@@ -18,7 +18,7 @@ const Sidebar = () => {
         'Content-Type': 'application/json',
       };
 
-      await axios.post('http://localhost:8083/auth/logout', {}, { headers });
+      await axios.post('http://localhost:8083/logout', {}, { headers });
 
       sessionStorage.removeItem('token');
       // Redirect or perform other actions as needed after logout

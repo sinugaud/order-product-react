@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import NavBar from "../navbar/Navbar";
-import { NavbarWithSearch } from "../navbar/NavbarWithSearch";
 
 const OrderDetails = ({ onData }) => {
   const { id } = useParams();
@@ -61,7 +60,7 @@ const OrderDetails = ({ onData }) => {
               <p className="text-gray-600 mb-4">Date: {order.date}</p>
               <p className="text-gray-600 mb-4">Status: {order.status}</p>
               <p className="text-gray-600 mb-4">
-                Total Amount: ${order.totalAmount}
+                Total Amount: {order.totalAmount}
               </p>
             </div>
           ) : (

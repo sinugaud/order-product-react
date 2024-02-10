@@ -21,11 +21,9 @@ const OrderService = (props) => {
         console.error(error.message);
       });
   }, [id]);
-  const user =sessionStorage.getItem('username');
-
+  const user = sessionStorage.getItem("username");
 
   const handleSubmit = async (values) => {
-    
     if (!product) {
       console.error("Product details not available");
       return;
@@ -33,7 +31,7 @@ const OrderService = (props) => {
 
     const { username, status, quantity } = values;
     const totalAmount = product.price * quantity;
-    console.log("logged username = ",username)
+    console.log("logged username = ", username);
 
     const orderData = {
       username,
@@ -48,98 +46,113 @@ const OrderService = (props) => {
       ],
     };
 
-    const authToken = sessionStorage.getItem('token');
+    const authToken = sessionStorage.getItem("token");
 
     const headers = {
-      Authorization:"Bearer "+ authToken,
-      'Content-Type': 'application/json',
+      Authorization: "Bearer " + authToken,
+      "Content-Type": "application/json",
     };
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/orders", orderData, { headers: headers }
+        "http://localhost:8081/api/orders",
+        orderData,
+        { headers: headers }
       );
       console.log("Order created:", response.data);
       Swal.fire({
-        title: 'Order Place Successful',
-        icon: 'success',
-        timer: 1500
-    });
+        title: "Order Place Successful",
+        icon: "success",
+        timer: 1500,
+      });
     } catch (error) {
       console.error("Error creating order:", error);
     }
   };
 
   return (
-    <div className="flex">
+    // <div className="flex">
+    <>
       <NavBar></NavBar>
-      {/* Sidebar */}
-      <div className="w-1/4 bg-gray-100 h-screen p-4">
-        <ProductDetails onData={(name, price) => setProduct({ name, price })}></ProductDetails>
-      </div>
+      {/* <div className="w-1/4 bg-gray-100 h-screen p-4"> */}
 
-      {/* Main Content */}
-      <div className="w-3/4 bg-gray-200 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold mb-4">place Order</h2>
-          <Formik
-            initialValues={{
-              username: user,
-              status: "",
-              quantity: "",
-            }}
-            onSubmit={handleSubmit}
-          >
+      {/* <ProductDetails onData={(name, price) => setProduct({ name, price })}></ProductDetails> */}
+      {/* </div> */}
+      {/* <div className="w-3/4 bg-gray-200 p-4"> */}
+      <div className="flex flex-row h-screen">
+        <div className="w-1/4 bg-gray-100 p-4">
+          <ProductDetails
+            onData={(name, price) => setProduct({ name, price })}
+          ></ProductDetails>
+        </div>
+        {/* </div> */}
+        <div
+          className="flex-grow bg-white p-8 rounded-lg shadow-md"
+          style={{
+            display: "flex",
+            justifyContent: "center",
 
-{({ values }) => (
-                  <Form className="space-y-4">
-                <Field
-                  type="hidden"
-                      // type="text"
-                      name="username"
-                      placeholder="User name"
-                      className="border p-2 rounded-md w-full"
-                    />
-              
-                    <Field
-                      as="select"
-                      name="status"
-                      className="border p-2 rounded-md w-full"
-                    >
-                      <option value="">Select Status</option>
-                      <option value="PENDING">Pending</option>
-                      <option value="PROCESSING">Processing</option>
-                      <option value="COMPLETED">Completed</option>
-                      <option value="CANCELLED">Cancelled</option>
-                    </Field>
-                    <Field
-                      type="number"
-                      name="quantity"
-                      placeholder="Quantity"
-                      className="border p-2 rounded-md w-full"
-                    />
+          }}
+        >
+          <div>
+            <h2 className="text-2xl font-bold" style={{marginBottom:"20px"}}>Place Order</h2>
+            <Formik
+              initialValues={{
+                username: user,
+                status: "",
+                quantity: "",
+              }}
+              onSubmit={handleSubmit}
+            >
+              {({ values }) => (
+                <Form className="space-y-4">
+                  <Field
+                    type="hidden"
+                    // type="text"
+                    name="username"
+                    placeholder="User name"
+                    className="border p-2 rounded-md w-full"
+                  />
 
-                    {product && (
-                      <p className="text-gray-700">
-                        Price: ${product.price} Total: $
-                        {product.price * values.quantity}
-                      </p>
-                    )}
+                  <Field
+                    as="select"
+                    name="status"
+                    className="border p-2 rounded-md w-full"
+                  >
+                    <option value="">Select Status</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="PROCESSING">Processing</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
+                  </Field>
+                  <Field
+                    type="number"
+                    name="quantity"
+                    placeholder="Quantity"
+                    className="border p-2 rounded-md w-full"
+                  />
 
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md w-full"
-                    >
-                       Order
-                    </button>
-                  </Form>
-                )}
+                  {product && (
+                    <p className="text-gray-700">
+                      Price: ${product.price} Total: $
+                      {product.price * values.quantity}
+                    </p>
+                  )}
 
-
-          </Formik>
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md w-full"
+                  >
+                    Order
+                  </button>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
-    </div>
+      {/* </div> */}
+    </>
   );
 };
 
