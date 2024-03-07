@@ -11,8 +11,9 @@ import Sidebar from "./components/navbar/Sidebar";
 import Login from "./components/login/Login";
 import ProtectedRoute from "./components/protected-route/ProtectedRoute";
 import Signup from "./components/signup/Signup";
-import UserProfile from "./components/profile/UserProfile";
 import Stripes from "./components/stripe/Stripes";
+import UserProfile from "./components/profile/Profile";
+import Profile from "./components/profile/Profile";
 
 function App() {
   
@@ -27,9 +28,10 @@ function App() {
           element={<ProtectedRoute Component={OrderList} />}
         />
         <Route
-          path="/orders"
-          element={<ProtectedRoute Component={OrderList} />}
+          path="/profile"
+          element={<ProtectedRoute Component={Profile} />}
         />
+        
         {/* <ProtectedRoute
           path="/order"
           component={OrderList}
@@ -46,7 +48,7 @@ function App() {
         <Route path="/product/:" element={<ProductDetails />} />
 
 
-        <Route path="/profile" element={<UserProfile />} />
+        {/* <Route path="/profile" element={<UserProfile />} /> */}
         <Route path="/payment" element={<Stripes />} />
       </Routes>
     </div>

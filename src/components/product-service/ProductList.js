@@ -8,8 +8,9 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
+  useEffect( () => {
+    async function getproductlist(){    
+   axios
       .get("http://localhost:8082/api/products")
       .then((response) => {
         setProducts(response.data);
@@ -20,7 +21,9 @@ const ProductList = () => {
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, []);
+    }
+    getproductlist();
+  },[]);
 
   const getorder = (id) => {
     navigate(`/place-order/${id}`);

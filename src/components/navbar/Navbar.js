@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import UserProfile from '../profile/UserProfile';
+import Swal from 'sweetalert2';
 
 function Navigation() {
   return (
@@ -44,7 +45,12 @@ function NavBar() {
         'Content-Type': 'application/json',
       };
 
-      await axios.post('http://localhost:8083/auth/logout', {}, { headers });
+      await axios.post('http://localhost:8083/auth/logout', {},  Swal.fire({
+        title: "Logout  Successful",
+        icon: "success",
+        timer: 1500,
+      }
+        ), { headers });
 
       sessionStorage.removeItem('token');
 

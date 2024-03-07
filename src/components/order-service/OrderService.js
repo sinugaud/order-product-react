@@ -31,7 +31,6 @@ const OrderService = (props) => {
 
     const { username, status, quantity } = values;
     const totalAmount = product.price * quantity;
-    console.log("logged username = ", username);
 
     const orderData = {
       username,

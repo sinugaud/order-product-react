@@ -22,7 +22,7 @@ const OrderList = () => {
       .get("http://localhost:8081/api/orders",{ headers: headers })
       .then((response) => {
         setOrders(response.data);
-        console.log("Response:", response);
+        // console.log("Response:", response);
       })
       .catch((error) => {
         console.error("Error fetching orders:", error);
