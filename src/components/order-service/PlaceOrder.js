@@ -2,14 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import ProductDetails from "../product-service/ProductDetails";
 import ProductService from "../product-service/ProductService";
 import Swal from "sweetalert2";
 import NavBar from "../navbar/Navbar";
+import { loadStripe } from "@stripe/stripe-js"; // Ensure Stripe is installed
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"; // Ensure Stripe is installed
+
+const stripePromise = loadStripe("pk_test_51BTUDGJAJfZb9HEBwDg86TN1KNprHjkfipXmEDMb0gSCassK5T3ZfxsAbcgKVmAIXF7oZ6ItlZZbXO6idTHE67IM007EwQ4uN3"); // Replace with your Stripe publishable key
 
 const PlaceOrder = (props) => {
   const { id } = useParams();
   const [product, setProduct] = useState("");
+  const [cardError, setCardError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const stripe = useStripe(); // Get Stripe instance
+  const elements = useElements(); // Get elements instance
 
   useEffect(() => {
     ProductService.getProductDetails(id)
@@ -21,19 +29,20 @@ const PlaceOrder = (props) => {
         console.error(error.message);
       });
   }, [id]);
+
   const user = sessionStorage.getItem("username");
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     if (!product) {
       console.error("Product details not available");
       return;
     }
 
-    const { username, status, quantity } = values;
+    const { status, quantity } = values;
     const totalAmount = product.price * quantity;
 
     const orderData = {
-      username,
+      username: user,
       status,
       totalAmount,
       orderItems: [
@@ -53,11 +62,25 @@ const PlaceOrder = (props) => {
     };
 
     try {
+      // Create Payment Method
+      const { error: paymentError, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: elements.getElement(CardElement),
+      });
+
+      if (paymentError) {
+        setCardError(paymentError.message);
+        setSubmitting(false);
+        return;
+      }
+
+      // Include paymentMethod.id in the order request
       const response = await axios.post(
         "http://localhost:8081/api/orders",
-        orderData,
+        { ...orderData, paymentMethodId: paymentMethod.id }, // Send payment method ID
         { headers: headers }
       );
+
       console.log("Order created:", response.data);
       Swal.fire({
         title: "Order Place Successful",
@@ -66,23 +89,16 @@ const PlaceOrder = (props) => {
       });
     } catch (error) {
       console.error("Error creating order:", error);
+    } finally {
+      setSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    // <div className="flex">
     <>
-      <NavBar></NavBar>
-      {/* <div className="w-1/4 bg-gray-100 h-screen p-4"> */}
-
-      {/* <ProductDetails onData={(name, price) => setProduct({ name, price })}></ProductDetails> */}
-      {/* </div> */}
-      {/* <div className="w-3/4 bg-gray-200 p-4"> */}
+      <NavBar />
       <div className="flex flex-row h-screen">
-        {/* <div className="w-1/4 bg-gray-100 p-4">
-            {/* onData={(name, price) => setProduct({ name, price })} */}
-        {/* </div> */}
-        {/* </div> */}
         <div
           className="flex-grow bg-white p-8 rounded-lg shadow-md"
           style={{
@@ -102,21 +118,11 @@ const PlaceOrder = (props) => {
               }}
               onSubmit={handleSubmit}
             >
-              {({ values }) => (
+              {({ values, isSubmitting }) => (
                 <Form className="space-y-4">
-                  <Field
-                    type="hidden"
-                    // type="text"
-                    name="username"
-                    placeholder="User name"
-                    className="border p-2 rounded-md w-full"
-                  />
+                  <Field type="hidden" name="username" />
 
-                  <Field
-                    as="select"
-                    name="status"
-                    className="border p-2 rounded-md w-full"
-                  >
+                  <Field as="select" name="status" className="border p-2 rounded-md w-full">
                     <option value="">Select Status</option>
                     <option value="PENDING">Pending</option>
                     <option value="PROCESSING">Processing</option>
@@ -132,16 +138,21 @@ const PlaceOrder = (props) => {
 
                   {product && (
                     <p className="text-gray-700">
-                      Price: ${product.price} Total: $
-                      {product.price * values.quantity}
+                      Price: ${product.price} Total: ${product.price * values.quantity}
                     </p>
                   )}
+
+                  {/* Step 1: Add CardElement for Stripe payment */}
+                  <CardElement className="border p-2 rounded-md w-full" />
+
+                  {cardError && <div className="text-red-500">{cardError}</div>}
 
                   <button
                     type="submit"
                     className="bg-blue-500 text-white px-4 py-2 rounded-md w-full"
+                    disabled={isSubmitting || loading}
                   >
-                    Order
+                    {isSubmitting || loading ? "Processing..." : "Order"}
                   </button>
                 </Form>
               )}
@@ -149,7 +160,6 @@ const PlaceOrder = (props) => {
           </div>
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 };
