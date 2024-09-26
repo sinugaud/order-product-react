@@ -1,7 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import ProductList from "./components/product-service/ProductList";
-import OrderService from "./components/order-service/OrderService";
+import OrderService from "./components/order-service/PlaceOrder";
 import ProductDetails from "./components/product-service/ProductDetails";
 import OrderList from "./components/order-service/OrderList";
 import NavBar from "./components/navbar/Navbar";
@@ -11,16 +11,17 @@ import Sidebar from "./components/navbar/Sidebar";
 import Login from "./components/login/Login";
 import ProtectedRoute from "./components/protected-route/ProtectedRoute";
 import Signup from "./components/signup/Signup";
-import Stripes from "./components/stripe/Stripes";
 import UserProfile from "./components/profile/Profile";
 import Profile from "./components/profile/Profile";
+import Logout from "./components/login/Logout";
+import ProfilePage from "./components/profile/ProfilePage";
 
 function App() {
-  
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<ProductList />} />
+        <Route index element={<ProductList />} />
+        <Route path="/products" element={<ProductList />} />
         <Route path="/place-order/:id" element={<OrderService />} />
         <Route path="/product-detail/:id" element={<ProductDetails />} />
         <Route
@@ -29,9 +30,11 @@ function App() {
         />
         <Route
           path="/profile"
-          element={<ProtectedRoute Component={Profile} />}
+          element={<ProtectedRoute Component={ProfilePage} />}
         />
-        
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/pro" element={<ProfilePage />} />
+
         {/* <ProtectedRoute
           path="/order"
           component={OrderList}
@@ -47,9 +50,7 @@ function App() {
         {/* <Route path='/logout' element={< Logout />} /> */}
         <Route path="/product/:" element={<ProductDetails />} />
 
-
         {/* <Route path="/profile" element={<UserProfile />} /> */}
-        <Route path="/payment" element={<Stripes />} />
       </Routes>
     </div>
   );

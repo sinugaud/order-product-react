@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 function UserProfile({ handleLogout, loggingOut }) {
   const [showMenu, setShowMenu] = useState(false);
+  
 
   const userNavigation = [
     { name: 'My Profile', link: '/profile' },
@@ -29,7 +30,6 @@ function UserProfile({ handleLogout, loggingOut }) {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            {/* Your SVG paths here */}
           </svg>
         </button>
       </div>

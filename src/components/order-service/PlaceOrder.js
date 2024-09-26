@@ -7,7 +7,7 @@ import ProductService from "../product-service/ProductService";
 import Swal from "sweetalert2";
 import NavBar from "../navbar/Navbar";
 
-const OrderService = (props) => {
+const PlaceOrder = (props) => {
   const { id } = useParams();
   const [product, setProduct] = useState("");
 
@@ -79,22 +79,21 @@ const OrderService = (props) => {
       {/* </div> */}
       {/* <div className="w-3/4 bg-gray-200 p-4"> */}
       <div className="flex flex-row h-screen">
-        <div className="w-1/4 bg-gray-100 p-4">
-          <ProductDetails
-            onData={(name, price) => setProduct({ name, price })}
-          ></ProductDetails>
-        </div>
+        {/* <div className="w-1/4 bg-gray-100 p-4">
+            {/* onData={(name, price) => setProduct({ name, price })} */}
+        {/* </div> */}
         {/* </div> */}
         <div
           className="flex-grow bg-white p-8 rounded-lg shadow-md"
           style={{
             display: "flex",
             justifyContent: "center",
-
           }}
         >
           <div>
-            <h2 className="text-2xl font-bold" style={{marginBottom:"20px"}}>Place Order</h2>
+            <h2 className="text-2xl font-bold" style={{ marginBottom: "20px" }}>
+              Place Order
+            </h2>
             <Formik
               initialValues={{
                 username: user,
@@ -155,4 +154,4 @@ const OrderService = (props) => {
   );
 };
 
-export default OrderService;
+export default PlaceOrder;
