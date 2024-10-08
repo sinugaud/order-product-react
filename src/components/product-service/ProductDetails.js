@@ -15,7 +15,7 @@ const ProductDetails = ({ onData }) => {
   useEffect(() => {
     if (!fetched) {
       axios
-        .get(`http://localhost:8082/api/products/${id}`)
+        .get(`http://192.168.1.12:8085/api/products/${id}`)
         .then((response) => {
           setProduct(response.data);
           if (onData) {

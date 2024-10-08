@@ -1,53 +1,56 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import UserProfile from "../profile/UserProfile";
 
 function Logout() {
-   const [loggingOut, setLoggingOut] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
-   const handleLogout = async (e) => {
-     e.preventDefault();
-     const authToken = sessionStorage.getItem("token");
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    const authToken = sessionStorage.getItem("token");
 
-     try {
-       setLoggingOut(true);
+    try {
+      setLoggingOut(true);
 
-       const headers = {
-         Authorization: "Bearer " + authToken,
-         "Content-Type": "application/json",
-       };
+      const headers = {
+        Authorization: "Bearer " + authToken,
+        "Content-Type": "application/json",
+      };
 
-       await axios.post(
-         "http://localhost:8083/api/auth/logout",
-         {},
-         Swal.fire({
-           title: "Logout  Successful",
-           icon: "success",
-           timer: 1500,
-         }),
-         { headers }
-       );
+      await axios.post(
+        "http://192.168.1.12:8085/api/auth/logout",
+        {}, // Empty body for logout
+        { headers } // Correct placement for headers
+      );
 
-       sessionStorage.removeItem("token");
+      Swal.fire({
+        title: "Logout Successful",
+        icon: "success",
+        timer: 1500,
+      });
 
-       setTimeout(() => {
-         setLoggingOut(false);
-         window.location.href = "/"; // Redirect if needed
-       }, 1500); // Adjust the time according to your preference
-     } catch (error) {
-       console.error("Error:", error);
-       setLoggingOut(false);
-     }
-   };
+      sessionStorage.removeItem("token");
 
+      setTimeout(() => {
+        setLoggingOut(false);
+        window.location.href = "/"; // Redirect after logout
+      }, 1500); // Adjust the delay as per your need
+    } catch (error) {
+      console.error("Error:", error);
+      setLoggingOut(false);
+    }
+  };
 
-    return (
-                  <UserProfile handleLogout={handleLogout} loggingOut={loggingOut} />
-
-    // <div className="flex items-center justify-center h-screen">
-    //   <button onClickCapture={handleLogout}>Logout User</button>
-    // </div>
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <button 
+        onClick={handleLogout} 
+        disabled={loggingOut} 
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+      >
+        {loggingOut ? "Logging Out..." : "Sign Out"}
+      </button>
+    </div>
   );
 }
 

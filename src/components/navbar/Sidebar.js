@@ -8,7 +8,7 @@ const Sidebar = () => {
   const handleLogout = async (e) => {
     e.preventDefault();
     const authToken = sessionStorage.getItem('token');
-    console.log("authToken",authToken)
+    console.log("authToken", authToken);
 
     try {
       setLoggingOut(true); // Set logging out state to true
@@ -18,27 +18,20 @@ const Sidebar = () => {
         'Content-Type': 'application/json',
       };
 
-      await axios.post('http://localhost:8083/logout', {}, { headers });
+      await axios.post('http://192.168.1.12:8085', {}, { headers });
 
       sessionStorage.removeItem('token');
-      // Redirect or perform other actions as needed after logout
-
-      // Simulate a slight delay for effect (you can remove this setTimeout)
+      // Simulate a slight delay for effect
       setTimeout(() => {
-        setLoggingOut(false); // Reset logging out state after some time (simulating the logout process)
-        // window.location.href = '/'; // Redirect if needed
+        setLoggingOut(false); // Reset logging out state after some time
+        window.location.href = '/'; // Redirect to the homepage or login after logout
       }, 1500); // Adjust the time according to your preference
     } catch (error) {
       console.error('Error:', error);
       setLoggingOut(false); // Reset logging out state in case of error
-      // Handle errors, maybe show an error message to the user
+      // Optionally handle errors or show an error message to the user
     }
   };
-
-
-
-
-
 
   return (
     <div className="bg-gray-800 w-60 h-screen fixed overflow-y-auto">
@@ -48,27 +41,28 @@ const Sidebar = () => {
           Dashboard
         </li>
         <li className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
-          <Link to={`/`} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
+          <Link to="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
             Products
           </Link>
         </li>
         <li className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
-          <Link to={`/orders`} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
+          <Link to="/orders" className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
             Orders
           </Link>
         </li>
         <li className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
-          <Link to={`/sign-up`} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
+          <Link to="/sign-up" className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2">
             Signup
           </Link>
         </li>
         <li>
-        <button onClick={handleLogout} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2" disabled={loggingOut}>
+          <button
+            onClick={handleLogout}
+            className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2"
+            disabled={loggingOut}
+          >
             {loggingOut ? 'Logging Out...' : 'Logout'}
           </button>
-
-
-
         </li>
         {/* Add more sidebar items as needed */}
       </ul>

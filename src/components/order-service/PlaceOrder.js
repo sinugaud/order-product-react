@@ -76,7 +76,7 @@ const PlaceOrder = (props) => {
 
       // Include paymentMethod.id in the order request
       const response = await axios.post(
-        "http://localhost:8081/api/orders",
+        "http://192.168.1.12:8081/api/orders",
         { ...orderData, paymentMethodId: paymentMethod.id }, // Send payment method ID
         { headers: headers }
       );

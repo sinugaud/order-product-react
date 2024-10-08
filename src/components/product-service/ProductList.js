@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../navbar/Navbar";
 import { Link, useNavigate } from "react-router-dom";
+import Cart from "../cart/Cart"; // Import the Cart component
+import AddToCart from "../cart/AddToCart";
 
 const ProductList = () => {
   const [token, setToken] = useState("");
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]); // State for cart
   const navigate = useNavigate();
 
+  console.log("cart",cart)
   async function getproductlist() {
-    console.log(new Date().getTime())
+    console.log(new Date().getTime());
     axios
-      .get("http://localhost:8082/api/products")
+      .get("http://192.168.1.12:8085/api/products")
       .then((response) => {
         setProducts(response.data);
         console.log("Response:", response);
@@ -21,11 +25,57 @@ const ProductList = () => {
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  };
+  }
 
   useEffect(() => {
     getproductlist();
   }, []);
+
+  // Add product to the cart
+  const addToCart = (product) => {
+    const existingProduct = cart.find((item) => item.id === product.id);
+    if (existingProduct) {
+      setCart(
+        cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }]);
+    }
+  };
+
+  // Remove product from the cart
+  const removeFromCart = (product) => {
+    setCart(cart.filter((item) => item.id !== product.id));
+  };
+
+  // Update the quantity of a product in the cart
+  const updateQuantity = (product, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeFromCart(product);
+    } else {
+      setCart(
+        cart.map((item) =>
+          item.id === product.id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    }
+  };
+
+  // Calculate total price of all items in the cart
+  const calculateTotalPrice = () => {
+    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  };
+
+  // Function to handle placing the order
+  const placeOrder = () => {
+    console.log("Order placed:", cart);
+    // Redirect after order placement
+    navigate(`/place-order`); 
+  };
 
   const getorder = (id) => {
     navigate(`/place-order/${id}`);
@@ -57,7 +107,7 @@ const ProductList = () => {
                       Description: {product.description}
                     </p>
                     <div className="flex justify-between items-center">
-                      <p className="text-gray-600">Price: {product.price}</p>
+                      <p className="text-gray-600">Price: ${product.price}</p>
                       <p className="text-gray-600">
                         Quantity: {product.quantity}
                       </p>
@@ -66,13 +116,16 @@ const ProductList = () => {
                 </Link>
                 <button
                   className="w-full py-2 rounded-b-md font-semibold text-white bg-blue-500 hover:bg-blue-600"
-                  onClick={() => getorder(product.id)}
+                  onClick={() => addToCart(product)} // Add to cart on button click
                 >
-                  Order Now
+                  Add to Cart
                 </button>
               </div>
             ))}
           </div>
+
+          {/* Cart Section */}
+          
         </div>
       </div>
     </>

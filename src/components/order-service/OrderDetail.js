@@ -14,7 +14,7 @@ const OrderDetails = ({ onData }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8081/api/orders/${id}`  ,{ headers: headers })
+      .get(`http://192.168.1.12:8081/api/orders/${id}`  ,{ headers: headers })
       .then((response) => {
         setOrder(response.data);
         if (onData) {
